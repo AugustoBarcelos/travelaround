@@ -3,22 +3,26 @@ using TravelMapApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar o serviço do DbContext com SQLite (ou outro banco local para desenvolvimento)
+// Configurar o serviço do DbContext com SQLite
 builder.Services.AddDbContext<TravelMapDbContext>(options =>
     options.UseSqlite("Data Source=travelmap.db"));
 
-// Adicionar serviços necessários, como controllers e outros serviços para a API
+// Adicionar serviços para controllers da API
 builder.Services.AddControllers();
+
+// Configurar Swagger para desenvolvimento
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configurações de pipeline da aplicação
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-// Configurações do roteamento e dos endpoints
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
